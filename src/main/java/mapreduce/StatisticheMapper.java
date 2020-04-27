@@ -1,15 +1,19 @@
+package mapreduce;
 import java.io.IOException;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class StatisticheMapper extends Mapper<Object, Text, Text, StockCustomValue> {
+import constants.HistoricalStockPricesConstants;
+import models.StockPricesCustomValue;
+
+public class StatisticheMapper extends Mapper<Object, Text, Text, StockPricesCustomValue> {
 	
 	private Text ticker = new Text(); 
-	private StockCustomValue custom = new StockCustomValue();
+	private StockPricesCustomValue custom = new StockPricesCustomValue();
 	
 	
 	@Override
-	protected void map(Object key, Text value, Mapper<Object, Text, Text, StockCustomValue>.Context context)
+	protected void map(Object key, Text value, Mapper<Object, Text, Text, StockPricesCustomValue>.Context context)
 			throws IOException, InterruptedException {
 		
 		String[] parts = value.toString().split(",");
@@ -44,10 +48,10 @@ public class StatisticheMapper extends Mapper<Object, Text, Text, StockCustomVal
 		try {
 			String[] data = parts[HistoricalStockPricesConstants.DATE].split("-");
 
-			if(Integer.parseInt(data[0])>2008) {
-				custom.setAnno(data[0]);
-				custom.setMese(data[1]);
-				custom.setGiorno(data[2]);
+			if(Integer.parseInt(data[0])>=2008) {
+				custom.setAnno(Integer.parseInt(data[0]));
+				custom.setMese(Integer.parseInt(data[1]));
+				custom.setGiorno(Integer.parseInt(data[2]));
 				context.write(ticker, custom);
 			}
 		} catch(Exception e) {

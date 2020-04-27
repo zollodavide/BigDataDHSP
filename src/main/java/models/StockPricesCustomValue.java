@@ -1,10 +1,11 @@
+package models;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
 
-public class StockCustomValue implements Writable{
+public class StockPricesCustomValue implements Writable{
 	
 	
 	//RICONTROLLARE DATA COME ARRAY DI STRINGHE
@@ -14,18 +15,15 @@ public class StockCustomValue implements Writable{
 	// 10 | 20 -> +100%   
 	// 20 | 10 -> -50%
 	
-	
 	private double minPrezzo;
 	private double maxPrezzo;
 	private int volume;
 	private double prezzoChiusura;
-	private String anno;
-	private String mese;
-	private String giorno;
-//	private String[] data;
+	private int anno;
+	private int mese;
+	private int giorno;
 
-
-	public StockCustomValue(double minPrezzo, double maxPrezzo, int volume, double prezzoChiusura, String anno, String mese, String giorno) {
+	public StockPricesCustomValue(double minPrezzo, double maxPrezzo, int volume, double prezzoChiusura, int  anno, int mese, int giorno) {
 		super();
 		this.minPrezzo = minPrezzo;
 		this.maxPrezzo = maxPrezzo;
@@ -34,34 +32,26 @@ public class StockCustomValue implements Writable{
 		this.mese = mese;
 		this.giorno = giorno;
 		this.prezzoChiusura = prezzoChiusura;
-
 	}
 
 	
-	public StockCustomValue() {
+	public StockPricesCustomValue() {
 		super();
 	}
 	
-	public void setAnno(String anno) {
+	public void setAnno(int anno) {
 		this.anno = anno;
 	}
 
-	public void setMese(String mese) {
+	public void setMese(int mese) {
 		this.mese = mese;
 	}
 
-	public void setGiorno(String giorno) {
+	public void setGiorno(int giorno) {
 		this.giorno = giorno;
 	}
 
 
-//	public String[] getData() {
-//		return data;
-//	}
-//	
-//	public void setData(String[] data) {
-//		this.data = data;
-//	}
 
 	public double getMinPrezzo() {
 		return minPrezzo;
@@ -94,28 +84,17 @@ public class StockCustomValue implements Writable{
 	public void setPrezzoChiusura(double prezzoChiusura) {
 		this.prezzoChiusura = prezzoChiusura;
 	}
+
 	
-	public void setData(String[] data) {
-		this.anno = data[0];
-		this.mese = data[1];
-		this.giorno = data[2];
-	}
-	
-	public String[] getData() {
-		String[] data = { this.getAnno(), this.getMese(), this.getGiorno()}; 
-		return data;
-	}
-	
-	
-	public String getAnno() {
+	public int getAnno() {
 		return anno;
 	}
 
-	public String getMese() {
+	public int getMese() {
 		return mese;
 	}
 
-	public String getGiorno() {
+	public int getGiorno() {
 		return giorno;
 	}
 
@@ -124,9 +103,9 @@ public class StockCustomValue implements Writable{
 		out.writeDouble(maxPrezzo);
 		out.writeInt(volume);
 		out.writeDouble(prezzoChiusura);
-		out.writeChars(anno);
-		out.writeChars(mese);
-		out.writeChars(giorno);
+		out.writeInt(anno);
+		out.writeInt(mese);
+		out.writeInt(giorno);
 	}
 
 	public void readFields(DataInput in) throws IOException {
@@ -134,9 +113,9 @@ public class StockCustomValue implements Writable{
 		maxPrezzo = in.readDouble();
 		volume = in.readInt();
 		prezzoChiusura = in.readDouble();
-		anno = in.readLine();
-		mese = in.readLine();
-		giorno = in.readLine();
+		anno = in.readInt();
+		mese = in.readInt();
+		giorno = in.readInt();
 		
 	}
 
