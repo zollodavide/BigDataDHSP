@@ -36,8 +36,18 @@ public class StatisticheMapper extends Mapper<Object, Text, Text, StockCustomVal
 		}		
 		
 		try {
+			custom.setPrezzoChiusura(Double.parseDouble(parts[HistoricalStockPricesConstants.CLOSE]));
+		} catch(Exception e) {
+			custom.setPrezzoChiusura(0);
+		}
+		
+		try {
 			String[] data = parts[HistoricalStockPricesConstants.DATE].split("-");
+
 			if(Integer.parseInt(data[0])>2008) {
+				custom.setAnno(data[0]);
+				custom.setMese(data[1]);
+				custom.setGiorno(data[2]);
 				context.write(ticker, custom);
 			}
 		} catch(Exception e) {

@@ -9,7 +9,7 @@ public class Statistiche {
 
 	public static void main(String[] args) throws Exception {
 		@SuppressWarnings("deprecation")
-		Job job = new Job(new Configuration(), "Listeners");
+		Job job = new Job(new Configuration(), "Statistiche");
 		job.setJarByClass(Statistiche.class);
 		
 		job.setMapperClass(StatisticheMapper.class);
