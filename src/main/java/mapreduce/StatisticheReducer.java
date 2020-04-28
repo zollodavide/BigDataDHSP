@@ -21,9 +21,9 @@ public class StatisticheReducer extends Reducer<Text, StockPricesCustomValue, Te
 	protected void reduce(Text key, Iterable<StockPricesCustomValue> value,
 			Reducer<Text, StockPricesCustomValue, Text, Text>.Context context) throws IOException, InterruptedException {
 		
-		double lastPrice2008 = 0;
+		double firstPrice2008 = 0;
 		double lastPrice2018 = 0;
-		int maxAnno2008=0, maxMese2008=0, maxGiorno2008=0,maxAnno2018=0, maxMese2018=0, maxGiorno2018=0;
+		int minMese2008=0, minGiorno2008=0, maxMese2018=0, maxGiorno2018=0;
 		
 		double max = Double.MIN_VALUE;
 		double min = Double.MAX_VALUE;
@@ -33,17 +33,15 @@ public class StatisticheReducer extends Reducer<Text, StockPricesCustomValue, Te
 		for (StockPricesCustomValue stock : value) {
 						
 			if(stock.getAnno() == 2008) {
-				if(StatisticheUtility.dataMaggiore(stock.getAnno(),stock.getMese(),stock.getGiorno(), maxAnno2008, maxMese2008, maxGiorno2008)) {
-					maxAnno2008 = stock.getAnno();
-					maxMese2008 = stock.getMese();
-					maxGiorno2008 = stock.getGiorno();
-					lastPrice2008 = stock.getPrezzoChiusura();
+				if(StatisticheUtility.dataMinore(stock.getMese(),stock.getGiorno(), minMese2008, minGiorno2008)) {
+					minMese2008 = stock.getMese();
+					minGiorno2008 = stock.getGiorno();
+					firstPrice2008 = stock.getPrezzoChiusura();
 				}
 			}
 			
 			if(stock.getAnno() == 2018) {
-				if(StatisticheUtility.dataMaggiore(stock.getAnno(),stock.getMese(),stock.getGiorno(), maxAnno2018, maxMese2018, maxGiorno2018)) {
-					maxAnno2018 = stock.getAnno();
+				if(StatisticheUtility.dataMaggiore(stock.getMese(),stock.getGiorno(), maxMese2018, maxGiorno2018)) {
 					maxMese2018 = stock.getMese();
 					maxGiorno2018 = stock.getGiorno();
 					lastPrice2018 = stock.getPrezzoChiusura();
@@ -56,7 +54,7 @@ public class StatisticheReducer extends Reducer<Text, StockPricesCustomValue, Te
 			count++;
 		}
 		
-		double variazionePercentuale = Math.round(((lastPrice2008 - lastPrice2018) / lastPrice2018)*100);
+		double variazionePercentuale = Math.round(((firstPrice2008 - lastPrice2018) / lastPrice2018)*100);
 		//QUANDO IL NUMERO È A UNA CIFRA SBAGLIA
 		
 		double mean = sum/count;
