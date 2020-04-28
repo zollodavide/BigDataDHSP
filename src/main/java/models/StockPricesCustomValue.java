@@ -119,6 +119,59 @@ public class StockPricesCustomValue implements Writable{
 		
 	}
 
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + anno;
+		result = prime * result + giorno;
+		long temp;
+		temp = Double.doubleToLongBits(maxPrezzo);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + mese;
+		temp = Double.doubleToLongBits(minPrezzo);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(prezzoChiusura);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + volume;
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StockPricesCustomValue other = (StockPricesCustomValue) obj;
+		if (anno != other.anno)
+			return false;
+		if (giorno != other.giorno)
+			return false;
+		if (Double.doubleToLongBits(maxPrezzo) != Double.doubleToLongBits(other.maxPrezzo))
+			return false;
+		if (mese != other.mese)
+			return false;
+		if (Double.doubleToLongBits(minPrezzo) != Double.doubleToLongBits(other.minPrezzo))
+			return false;
+		if (Double.doubleToLongBits(prezzoChiusura) != Double.doubleToLongBits(other.prezzoChiusura))
+			return false;
+		if (volume != other.volume)
+			return false;
+		return true;
+	}
+
+	
+
+	
+
+
+
+
 	
 	
 
