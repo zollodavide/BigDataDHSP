@@ -98,6 +98,7 @@ public class StockPricesCustomValue implements Writable{
 		return giorno;
 	}
 
+	@Override
 	public void write(DataOutput out) throws IOException {
 		out.writeDouble(minPrezzo);
 		out.writeDouble(maxPrezzo);
@@ -108,6 +109,7 @@ public class StockPricesCustomValue implements Writable{
 		out.writeInt(giorno);
 	}
 
+	@Override
 	public void readFields(DataInput in) throws IOException {
 		minPrezzo = in.readDouble();
 		maxPrezzo = in.readDouble();
