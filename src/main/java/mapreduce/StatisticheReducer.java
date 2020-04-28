@@ -1,19 +1,26 @@
 package mapreduce;
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import models.StockPricesCustomValue;
 import utility.StatisticheUtility;
 
-public class StatisticheReducer extends Reducer<Text, StockPricesCustomValue, Text, Text>{
-	
+public class StatisticheReducer extends Reducer<Text, StockPricesCustomValue, Text, DoubleWritable>{
+
+	private Map<Text, Double> countMap = new HashMap<Text, Double>();
 
 	
 	@Override
 	protected void reduce(Text key, Iterable<StockPricesCustomValue> value,
-			Reducer<Text, StockPricesCustomValue, Text, Text>.Context context) throws IOException, InterruptedException {
+			Reducer<Text, StockPricesCustomValue, Text, DoubleWritable>.Context context) throws IOException, InterruptedException {
 		
 		double lastPrice2008 = 0;
 		double lastPrice2018 = 0;
@@ -54,11 +61,39 @@ public class StatisticheReducer extends Reducer<Text, StockPricesCustomValue, Te
 		//QUANDO IL NUMERO È A UNA CIFRA SBAGLIA
 		
 		double mean = sum/count;
-		Text out = new Text("Minimum Price: "+ min + ", Maximum Price: " + max+ ", Mean Volume: "+
-				mean+ ", Variazione Percentuale: " + variazionePercentuale+"%");
+		//Text out = new Text("Minimum Price: "+ min + ", Maximum Price: " + max+ ", Mean Volume: "+
+				//mean+ ", Variazione Percentuale: " + variazionePercentuale +"%");
 		
-		context.write(key, out);
+		//context.write(key, out);
+		countMap.put(key, new Double(variazionePercentuale));
+		
 		
 	}
+	
+	
+	@Override
+	protected void cleanup(Reducer<Text, StockPricesCustomValue, Text, DoubleWritable>.Context context)
+			throws IOException, InterruptedException {
+		
+		
+//		Map<Text, Double> sorted = countMap
+//		        .entrySet()
+//		        .stream()
+//		        .sorted(Map.Entry.<Text,Double>comparingByValue().reversed())
+//		        .collect(
+//		            Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2,
+//		                LinkedHashMap::new));
+		LinkedHashMap<Text, Double> sorted = new LinkedHashMap<>();
+        countMap.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
+		
+		for (Text key : sorted.keySet()) {
+			context.write(new Text(key.toString() + " + "+ sorted.size()), new DoubleWritable(sorted.get(key)));
+		}
+		
+		
+		
+	}
+	
 	
 }
