@@ -28,7 +28,7 @@ public class StatisticheReducer extends Reducer<Text, StockPricesCustomValue, Te
 		double max = Double.MIN_VALUE;
 		double min = Double.MAX_VALUE;
 		int count = 0;
-		int sum = 0;
+		long sum = 0;
 		
 		for (StockPricesCustomValue stock : value) {
 						
