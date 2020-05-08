@@ -28,7 +28,6 @@ public class StatisticheReducer extends Reducer<Text, StockPricesCustomValue, Te
 		double max = Double.MIN_VALUE;
 		double min = Double.MAX_VALUE;
 		int count = 0;
-		int a=0,b=0;
 		long sum = 0;
 		
 		for (StockPricesCustomValue stock : value) {
@@ -55,7 +54,6 @@ public class StatisticheReducer extends Reducer<Text, StockPricesCustomValue, Te
 		}
 		
 		double variazionePercentuale = Math.round(((lastPrice2018 - firstPrice2008) / firstPrice2008)*100);
-		
 		double mean = sum/count;
 	
 		countMap.put(key.toString(), new StockOutput(variazionePercentuale, mean, min, max));
